@@ -17,7 +17,7 @@ export default function CountdownTimer() {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const fetchTimer = async () => {
-    const res = await fetch("http://localhost:8081/api/timer");
+    const res = await fetch(import.meta.env.VITE_BACKEND_URL + `api/timer`);
     const data = await res.json(); // expects { seconds: number }
     setTimeLeft(data.seconds);
   };
@@ -44,11 +44,13 @@ export default function CountdownTimer() {
 
   const handleReset = async () => {
     clearInterval(intervalRef.current!);
-    await fetch("http://localhost:8081/api/timer/reset", { method: "POST" });
+    await fetch(import.meta.env.VITE_BACKEND_URL + `api/timer/reset`, {
+      method: "POST",
+    });
     await fetchTimer();
     setDisplayPopUp(false); // Close popup after reset
   };
-
+  console.log(import.meta.env.VITE_BACKEND_URL + `api/timer/reset`);
   return (
     <div className="flex flex-col items-center justify-center space-y-4">
       <div className="text-5xl font-mono text-gray-800">
